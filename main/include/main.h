@@ -41,6 +41,10 @@
  */
 // Project headers
 #include "autons.h"
+#include "autons_utils.h"
+#include "driver.h"
+#include "intake.h"
+#include "pneumatics.h"
 #include "config.h"
 #include "control.h"
 #include "utils.h"
