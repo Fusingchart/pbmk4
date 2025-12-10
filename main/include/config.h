@@ -19,14 +19,14 @@
 #define RIGHT_FRONT_5_5W_PORT 17
 
 // Left side drivetrain motors (11W - higher torque)
-#define LEFT_BACK_11W_PORT 5
-#define LEFT_MID_11W_PORT 6
-#define LEFT_FRONT_11W_PORT 7
+#define LEFT_BACK_11W_PORT 14
+#define LEFT_MID_11W_PORT 13
+#define LEFT_FRONT_11W_PORT 12
 
 // Right side drivetrain motors (11W - higher torque)
-#define RIGHT_BACK_11W_PORT 8
-#define RIGHT_MID_11W_PORT 9
-#define RIGHT_FRONT_11W_PORT 10
+#define RIGHT_BACK_11W_PORT 18
+#define RIGHT_MID_11W_PORT 19
+#define RIGHT_FRONT_11W_PORT 20
 
 // ============================================================================
 // INTAKE SYSTEM
@@ -49,11 +49,10 @@
 // Pneumatics for goal mechanisms
 #define MATCHLOADER_SOLENOID_PORT 'A'    // Matchloader piston
 #define PTO_SOLENOID_A_PORT 'B'          // PTO piston A
-#define PTO_SOLENOID_B_PORT 'C'          // PTO piston B
-#define SCORE_MIDDLE_SOLENOID_PORT 'D'   // Middle goal piston
-#define SCORE_HIGH_SOLENOID_PORT 'E'     // Long goal piston
-#define PARK_SOLENOID_A_PORT 'F'         // Park piston A
-#define PARK_SOLENOID_B_PORT 'G'         // Park piston B 
+#define SCORE_MIDDLE_SOLENOID_PORT 'C'   // Middle goal piston
+#define SCORE_HIGH_SOLENOID_PORT 'D'     // Long goal piston
+#define PARK_SOLENOID_A_PORT 'E'         // Park piston A
+#define DESCORE_SOLENOID_PORT 'F'        // Descore piston
 
 // ============================================================================
 // MOTOR CONFIGURATION CONSTANTS
