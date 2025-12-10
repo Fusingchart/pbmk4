@@ -1,6 +1,8 @@
 #ifndef _AUTONS_H_
 #define _AUTONS_H_
 
+#include "autons_utils.h"
+
 /**
  * \file autons.h
  *

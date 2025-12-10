@@ -27,14 +27,6 @@ void pneumatics_init() {
 	};
 }
 
-void pneumatics_actuate(bool extend) {
-	// TODO: Actuate pneumatics (extend/retract)
-}
-
-void pneumatics_retract() {
-	// TODO: Retract pneumatics
-}
-
 void pneumatics_set_state(const PneumaticsState& state) {
 	current_state = state;
 	
