@@ -41,9 +41,6 @@
  */
 // Project headers
 #include "autons.h"
-#include "driver.h"
-#include "intake.h"
-#include "pneumatics.h"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

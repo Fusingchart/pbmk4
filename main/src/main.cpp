@@ -31,7 +31,6 @@ void initialize() {
 	// Initialize subsystems
 	intake_init();
 	pneumatics_init();
-	driver_init();
 }
 
 /**
@@ -64,8 +63,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	// Call the appropriate autonomous routine
-	// auton_skills();
+	
 }
 
 /**
@@ -82,5 +80,5 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	driver_control();
+	
 }

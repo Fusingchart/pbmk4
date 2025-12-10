@@ -2,6 +2,8 @@
 #define _AUTONS_H_
 
 #include "autons_utils.h"
+#include "intake.h"
+#include "pneumatics.h"
 
 /**
  * \file autons.h

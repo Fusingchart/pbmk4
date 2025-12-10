@@ -7,12 +7,16 @@
  * Intake subsystem declarations
  */
 
+#include "config.h"
+#include "api.h"
+
 // Intake states
 enum IntakeState {
 	INTAKE = 0,
 	SCORE_MID = 1,
 	SCORE_LOW = 2,
-	SCORE_HIGH = 3
+	SCORE_HIGH = 3,
+	IDLE = 4
 };
 
 void intake_init();
