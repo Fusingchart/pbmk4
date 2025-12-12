@@ -79,12 +79,7 @@ void autonomous() {
  */
 void opcontrol() {
     while (true) {
-
-        if (master.get_digital_new_press(DIGITAL_X)) {
-            // hold_dist_and_reset(3000, 0, 2, 195, 0.1);
-            score_7_mid();
-        }
-
+        
         bool raise_wing = true;
         for (const pros::controller_digital_e_t button : WING_ON_BUTTON_COMBINATION) {
             if (!master.get_digital(button)) {

@@ -19,6 +19,23 @@ enum IntakeState {
 	IDLE = 4
 };
 
+
+struct JamState {
+	pros::Motor* target;
+
+	const uint32_t jam_tolerance;
+	const uint32_t unjam_duration;
+
+	uint32_t jam_start = 0;
+	uint32_t unjam_end = 0;
+
+	JamState(pros::Motor* target, uint32_t jam_tolerance, uint32_t unjam_duration);
+
+	void update();
+};
+
+extern JamState intake_jam_state;
+
 void intake_init();
 void intake_spin(double velocity);
 void intake_stop();

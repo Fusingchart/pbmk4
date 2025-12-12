@@ -24,11 +24,33 @@ bool wing_value = false;
 bool descore_value = false;
 bool clamp_value = false;
 
+JamState::JamState(pros::Motor* target, const uint32_t jam_tolerance, const uint32_t unjam_duration)
+	: target(target), jam_tolerance(jam_tolerance), unjam_duration(unjam_duration) {
+	jam_start = pros::millis();
+}
+
+void JamState::update() {
+	if (target->get_target_velocity() == 0 || target->get_actual_velocity() != 0) {
+		jam_start = pros::millis();
+	}
+
+	if (pros::millis() > unjam_end + jam_tolerance, pros::millis() - jam_start > jam_tolerance) {
+		std::cout << "starting unjam\n";
+
+		unjam_end = pros::millis() + unjam_duration;
+	}
+}
+
+JamState intake_jam_state(nullptr, 50, 50);
+
 void intake_init() {
 	// Initialize intake motor
 	intake_motor.tare_position();
 	intake_motor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	intake_motor.move_velocity(0);
+
+	intake_jam_state.target = &intake_motor;
+
 	current_state = IDLE;
 }
 
@@ -74,10 +96,46 @@ void set_clamp(bool value) {
 	(void)clamp_piston.set_value(clamp_value);
 }
 
-void set_score_mid(bool value);
-void set_park(bool value);
-void set_wing(bool value);
-void set_descore(bool value);
+void update_intake() {
+
+	double intake_vel = 0;
+
+	switch (current_state) {
+	case INTAKE:
+		set_score_mid(false);
+		intake_vel = (600);
+		set_pto(false);
+		break;
+	case SCORE_MID:
+		set_score_mid(true);
+		intake_vel = (600);
+		set_pto(true);
+		break;
+	case SCORE_LOW:
+		set_score_mid(false);
+		intake_vel = (-200);
+		set_pto(true);
+		break;
+	case SCORE_HIGH:
+		set_score_mid(false);
+		set_pto(true);
+		intake_vel = (600);
+		break;
+	case IDLE:
+
+		intake_stop();
+		break;
+	}
+
+	intake_jam_state.update();
+
+
+	if (intake_jam_state.unjam_end > pros::millis()) {
+		intake_vel *= -127;
+	}
+
+	intake_spin(intake_vel);
+}
 
 bool wing_macro_clamp = false;
 uint32_t intake_run_time = 0;
@@ -85,33 +143,7 @@ uint32_t intake_run_time = 0;
 void intake_set_state(IntakeState state) {
 	current_state = state;
 	
-	// Handle state-specific behavior
-	switch (state) {
-		case INTAKE:
-			set_score_mid(false);
-			intake_spin(600);
-		set_pto(false);
-			break;
-		case SCORE_MID:
-		set_score_mid(true);
-			intake_spin(600);
-		set_pto(true);
-			break;
-		case SCORE_LOW:
-		set_score_mid(false);
-			intake_spin(-200);
-		set_pto(true);
-			break;
-		case SCORE_HIGH:
-		set_score_mid(false);
-		set_pto(true);
-			intake_spin(600);
-			break;
-		case IDLE:
-
-			intake_stop();
-			break;
-	}
+	update_intake();
 }
 	float power_mult = 1;
 
