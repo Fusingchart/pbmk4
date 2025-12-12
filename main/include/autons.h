@@ -698,7 +698,7 @@ inline void LEFT张教练7() {
     chassis.moveToPose(-16.9, -6, 0, 900, {.forwards = false, .maxSpeed = 90, .minSpeed = 50});
     chassis.moveToPose(-15, -20, 0, 3000, {.forwards = false, .maxSpeed = 90, .minSpeed = 50});
     chassis.waitUntilDone();
-    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     chassis.arcade(-30, 30);
     pros::delay(400);
     chassis.turnToHeading(0, 2000, {.minSpeed = 40});
@@ -763,7 +763,7 @@ inline void RIGHT张教练7() {
     chassis.moveToPose(-14.5, -6, 0, 900, {.forwards = false, .maxSpeed = 90, .minSpeed = 50});
     chassis.moveToPose(-14, -20, 0, 3000, {.forwards = false, .maxSpeed = 90, .minSpeed = 50});
     chassis.waitUntilDone();
-    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     chassis.arcade(-30, 30);
     pros::delay(400);
     chassis.turnToHeading(0, 2000, {.minSpeed = 40});
@@ -860,7 +860,7 @@ inline void NewQualLeft() {
     chassis.arcade(100, 0);
     pros::delay(50);
     chassis.arcade(0, 0);
-    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     return;
 }
 
@@ -954,7 +954,7 @@ inline void NewQualRight() {
     chassis.arcade(0, -90);
     pros::delay(50);
     chassis.arcade(0, 0);
-    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     return;
 }
 
