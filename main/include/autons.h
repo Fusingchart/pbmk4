@@ -13,11 +13,333 @@
  * Autonomous mode declarations
  */
 
-void auton_skills();
-void auton_red_left();
-void auton_red_right();
-void auton_blue_left();
-void auton_blue_right();
+inline void skills() {
+            intake_set_state(INTAKE);
+
+    chassis.arcade(48,0);
+    pros::delay(400);
+    chassis.arcade(-10,0);
+    pros::delay(800);
+    chassis.turnToHeading(-2,300,{.minSpeed=40});
+    chassis.waitUntilDone();
+    pros::delay(400);
+    chassis.arcade(45,0);
+    pros::delay(600);
+    chassis.arcade(0,0);
+    chassis.turnToHeading(-1,300,{.minSpeed=40});
+    chassis.waitUntilDone();
+    pros::delay(800);
+    chassis.arcade(60,0);
+    pros::delay(300);
+    chassis.arcade(-20,0);
+    pros::delay(250);
+    chassis.arcade(0,0);
+    pros::delay(200);
+    chassis.turnToHeading(1,100,{.minSpeed=40});
+    chassis.waitUntilDone();
+    pros::delay(500);
+    chassis.arcade(45,0);
+    pros::delay(500);
+
+    //
+    chassis.arcade(-45,0);
+    pros::delay(1100);
+    chassis.arcade(28,0);
+    pros::delay(950);
+    intake_set_state(IDLE);
+    chassis.arcade(0,0);
+    pros::delay(50);
+    imu.set_roll(0);
+    imu.set_yaw(0);
+    imu.set_pitch(0);
+    imu.set_heading(0);
+    pros::delay(50);
+    chassis.setPose(-47, 0,-90);
+    intake_set_state(INTAKE);
+    chassis.arcade(-100,0);
+    pros::delay(100);
+    chassis.turnToPoint(-25.3,-15.4,430);
+    chassis.waitUntilDone();
+    intake_set_state(INTAKE);
+    chassis.moveToPoint(-25.3, -15.4, 1200, {.minSpeed=60});
+    chassis.turnToHeading(98,400);
+    chassis.waitUntilDone();
+    pros::delay(80);
+    intake_set_state(IDLE);
+    chassis.arcade(70,0);
+    pros::delay(400);
+    chassis.arcade(0,0);
+    pros::delay(400);
+    chassis.arcade(-50,0);
+    pros::delay(500);
+    intake_set_state(INTAKE);
+    chassis.turnToHeading(45,400);
+    chassis.moveToPoint(-13.5, -13.5, 400, {.minSpeed=60});
+    chassis.turnToHeading(45,200,{.minSpeed=80});
+    chassis.waitUntilDone();
+    chassis.arcade(50,0);
+    pros::delay(300);
+    chassis.turnToHeading(45,200,{.minSpeed=80});
+    chassis.waitUntilDone();
+    chassis.arcade(50,0);
+    pros::delay(200);
+    // auto_score_7_low();
+    score_7_mid();
+    chassis.arcade(-14,0);
+    pros::delay(200);
+    intake_set_state(SCORE_MID);
+    chassis.moveToPoint(-21, -30, 600, {.forwards=false, .minSpeed=100});
+    chassis.moveToPoint(-28, -42, 500, {.forwards=false, .minSpeed=100});
+    chassis.turnToHeading(-90, 600);
+    chassis.waitUntilDone();
+    // intake_raise_value = false;
+    set_matchloader(true);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //start normal route
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  intake_set_state(INTAKE);
+    set_matchloader(true);
+    chassis.setPose(0,0,-90);
+    match_load_reset(150,0,3);
+    pros::delay(100);
+    chassis.moveToPoint(-87, -48, 1000, {.forwards=true, .maxSpeed=55, .minSpeed=45},true);
+    chassis.waitUntilDone();
+    chassis.arcade(40, 0);
+    pros::delay(300);
+    chassis.arcade(-15, 0);
+    pros::delay(110);
+    chassis.arcade(38, 0);
+    pros::delay(500);
+    match_load_reset(500, 0, 3);
+    //intake_raise_value=true;
+    pros::delay(180);
+//    intake_raise_value=false;
+    pros::delay(150);
+    chassis.setPose(-70,chassis.getPose().y, chassis.getPose().theta);
+    chassis.arcade(-70,0);
+    pros::delay(200);
+    set_wing(true);
+    chassis.turnToHeading(-80,200);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//go to goal and score
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    chassis.moveToPoint(-40, -63, 500, {.forwards=false, .maxSpeed=90, .minSpeed=40});
+    chassis.moveToPoint(0, -65, 600, {.forwards=false, .maxSpeed=120, .minSpeed=70});
+    chassis.waitUntilDone();
+    intake_set_state(IDLE);
+    set_matchloader(false);
+    chassis.moveToPoint(18, -62.5, 900, {.forwards=false, .maxSpeed=120, .minSpeed=100});
+    chassis.turnToHeading(180,500,{.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(127,0);
+    pros::delay(300);
+    drive_until_distance(180,119, 70, 430, 1, false, 600);
+    chassis.turnToHeading(90,400);
+    chassis.waitUntilDone();
+    match_load_reset(150, 0, 4);
+    chassis.moveToPose(24, -48, 90, 300, {.forwards=false,.lead=0.6, .minSpeed=70});
+    chassis.turnToPoint(21,-48,50, {.forwards=false, .minSpeed=70});
+    chassis.moveToPose(21, -48, 90, 250, {.forwards=false, .lead=0.3, .minSpeed=80});
+    chassis.waitUntilDone();
+    chassis.arcade(-100,0);
+    intake_set_state(SCORE_HIGH);
+    pros::delay(400);
+    chassis.turnToHeading(90,300, {.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(-60,0);
+    pros::delay(200);
+    match_load_reset(500, 0, 4);
+    chassis.arcade(0,0);
+    pros::delay(400);
+        chassis.setPose(22,chassis.getPose().y,90);
+    set_matchloader(true);
+    intake_set_state(IDLE);
+    chassis.arcade(60,0);
+    pros::delay(300);
+    chassis.cancelAllMotions();
+    intake_set_state(INTAKE);
+    chassis.moveToPose(70, -47, 90, 1400, {.forwards=true, .maxSpeed=58,.minSpeed=50},true);
+    chassis.waitUntilDone();
+    chassis.arcade(40, 0);
+    pros::delay(300);
+    chassis.arcade(-15, 0);
+    pros::delay(120);
+    chassis.arcade(50, 0);
+    pros::delay(300);
+    match_load_reset(700, 0, 4);
+    //intake_raise_value=true;
+    pros::delay(180);
+//    intake_raise_value=false;
+    chassis.setPose(67,chassis.getPose().y, chassis.getPose().theta);
+    pros::delay(50);
+    chassis.arcade(-90,0);
+    pros::delay(300);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //score 2nd cycle on first goal
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    chassis.turnToPoint(20,-46.2,50, {.forwards=false, .minSpeed=70});
+    chassis.moveToPose(20,-46.2,90,650, {.forwards=false, .lead=0.3,.maxSpeed=110, .minSpeed=50,});
+    chassis.waitUntilDone();
+    intake_set_state(SCORE_HIGH);
+    chassis.arcade(-100,0);
+    pros::delay(350);
+    set_matchloader(false);
+    match_load_reset(80, 0, 4);
+    chassis.arcade(-100,50);
+    pros::delay(300);
+    chassis.arcade(-100,-50);
+    pros::delay(300);
+    chassis.turnToHeading(90,300, {.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(-100,0);
+    pros::delay(400);
+
+    chassis.turnToHeading(90,300, {.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(-60,0);
+    pros::delay(200);
+    chassis.arcade(40,0);
+    pros::delay(100);
+    chassis.arcade(-100,0);
+    pros::delay(300);
+    chassis.arcade(30,0);
+    pros::delay(400);
+    intake_set_state(INTAKE);
+    chassis.arcade(0,0);
+    pros::delay(300);
+    chassis.arcade(-40,0);
+    pros::delay(700);
+
+   chassis.setPose(0,0,90);
+    chassis.setPose(26,-48.5,chassis.getPose().theta);
+    chassis.arcade(60,0);
+    pros::delay(350);
+    chassis.turnToHeading(2,400);
+    intake_set_state(SCORE_MID);
+    chassis.moveToPoint(31, 0, 500, {.forwards=true, .maxSpeed=120, .minSpeed=110});
+    chassis.moveToPose(32, 20,2, 300, {.forwards=true, .maxSpeed=120, .minSpeed=110});
+    chassis.waitUntilDone();
+    drive_until_distance(0,119, 70, 450, 5, false, 1000);
+    chassis.waitUntilDone();
+    chassis.turnToHeading(90,500);
+    chassis.waitUntilDone();
+ intake_set_state(INTAKE);
+    set_matchloader(true);
+
+    match_load_reset(150,0,1);
+    pros::delay(100);
+    chassis.cancelAllMotions();
+
+    chassis.moveToPoint(104, 47, 1000, {.forwards=true, .maxSpeed=45, .minSpeed=40},true);
+    chassis.waitUntilDone();
+    chassis.arcade(40, 0);
+    pros::delay(300);
+    chassis.arcade(-15, 0);
+    pros::delay(120);
+    chassis.arcade(50, 0);
+    pros::delay(300);
+    match_load_reset(700, 0, 1);
+    //intake_raise_value=true;
+    pros::delay(180);
+//    intake_raise_value=false;
+    pros::delay(200);
+    chassis.arcade(-70,0);
+    pros::delay(200);
+    chassis.turnToHeading(100,200);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//go to goal and score
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    chassis.moveToPoint(37, 59, 500, {.forwards=false, .maxSpeed=120, .minSpeed=50});
+    chassis.turnToPoint(0,63,50,{.forwards=false, .minSpeed=80});
+    chassis.moveToPoint(0, 63, 600, {.forwards=false, .maxSpeed=120, .minSpeed=100});
+    chassis.waitUntilDone();
+    intake_set_state(IDLE);
+    set_matchloader(false);
+    chassis.moveToPoint(-23, 64.5, 800, {.forwards=false, .maxSpeed=120, .minSpeed=110});
+    chassis.turnToHeading(0,500,{.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(127,0);
+    pros::delay(300);
+    drive_until_distance(0,119, 70, 450, 1, false, 500);
+    chassis.turnToHeading(-90,400);
+    chassis.waitUntilDone();
+    match_load_reset(150, 0, 2);
+    chassis.moveToPose(-24, 48, -90, 500, {.forwards=false,.lead=0.6, .minSpeed=70});
+    chassis.turnToPoint(-21,48,50, {.forwards=false, .minSpeed=70});
+    chassis.moveToPose(-21, 48, -90, 200, {.forwards=false, .lead=0.3, .minSpeed=80});
+    chassis.waitUntilDone();
+    intake_set_state(SCORE_HIGH);
+    chassis.arcade(-100,0);
+    pros::delay(200);
+    chassis.turnToHeading(-90,300, {.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(-60,0);
+    pros::delay(500);
+    set_matchloader(true);
+    pros::delay(500);
+    chassis.setPose(-22,chassis.getPose().y,chassis.getPose().theta);
+    pros::delay(200);
+    chassis.arcade(60,0);
+    pros::delay(300);
+    intake_set_state(INTAKE);
+    chassis.cancelMotion();
+    chassis.moveToPose(-75, 47.5, -90, 1700, {.forwards=true, .maxSpeed=45,.minSpeed=38},true);
+    chassis.waitUntilDone();
+    intake_set_state(INTAKE);
+    chassis.arcade(40, 0);
+    pros::delay(300);
+    chassis.arcade(-15, 0);
+    pros::delay(120);
+    chassis.arcade(50, 0);
+    pros::delay(300);
+    match_load_reset(700, 0, 2);
+    // //intake_raise_value=true;
+    pros::delay(180);
+    // intake_raise_value=false;
+    pros::delay(200);
+    chassis.arcade(-90,0);
+    pros::delay(300);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //score 4th cycle on second goal
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    chassis.moveToPose(-18,48,-90,600, {.forwards=false, .maxSpeed=110, .minSpeed=80,}, false);
+    chassis.waitUntilDone();
+    intake_set_state(SCORE_HIGH);
+    chassis.arcade(-100,0);
+    pros::delay(350);
+    set_matchloader(false);
+    match_load_reset(80, 0, 2);
+    chassis.arcade(-100,0);
+    pros::delay(600);
+    chassis.turnToHeading(-90,100, {.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(-100,0);
+    pros::delay(200);
+    chassis.turnToHeading(-90,100, {.minSpeed=60});
+    chassis.waitUntilDone();
+    chassis.arcade(-60,0);
+    pros::delay(300);
+    match_load_reset(80,0,2);
+    pros::delay(100);
+    chassis.setPose(0,0,0);
+    chassis.turnToHeading(-90,400,{.minSpeed=70});
+    chassis.waitUntilDone();
+    chassis.setPose(0,0,(chassis.getPose().theta)+90);
+    intake_set_state(INTAKE);
+    chassis.moveToPoint(10, 25, 500, {.forwards=true, .maxSpeed=120, .minSpeed=90});
+    chassis.moveToPoint(12, 33, 1050, {.forwards=true, .maxSpeed=120, .minSpeed=90});
+    chassis.turnToHeading(90,270);
+    chassis.waitUntilDone();
+   intake_set_state(INTAKE);
+    chassis.arcade(120,0);
+    pros::delay(800);
+    chassis.arcade(50,0);
+    pros::delay(800);
+
+}
 
 inline void awp_12() {
     //tuned nov 14 2025 2:55am
@@ -48,7 +370,7 @@ inline void awp_12() {
     chassis.waitUntilDone();
     chassis.arcade(-100, 0);
     pros::delay(300);
-    set_matchloader(false);
+    set_matchloader(false);;
     pros::delay(800);
     chassis.setPose(0, 0, -90);
     chassis.turnToHeading(0, 400, {.minSpeed = 80});
@@ -67,7 +389,7 @@ inline void awp_12() {
     pros::delay(200);
     set_matchloader(true);
     pros::delay(150);
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.waitUntilDone();
     chassis.moveToPose(-27.5, 33, 0, 700, {
                            .forwards = true, .horizontalDrift = 0, .lead = 0.1, .maxSpeed = 127, .minSpeed = 0,
@@ -98,7 +420,7 @@ inline void awp_12() {
     pros::delay(600);
     intake_set_state(IntakeState::INTAKE);
     chassis.setPose(-12, 12, chassis.getPose().theta);
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(120, 0);
     pros::delay(140);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
@@ -142,7 +464,7 @@ inline void elims_right9() {
     pros::delay(500);
     set_matchloader(true);
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.moveToPose(11.5, 38, -20, 400, {.minSpeed = 20});
     chassis.turnToHeading(-20, 150, {.minSpeed = 30});
     chassis.moveToPose(8, 44, 0, 1000, {.lead = 0.4, .maxSpeed = 70, .minSpeed = 30});
@@ -167,7 +489,7 @@ inline void elims_right9() {
     pros::delay(400);
     chassis.arcade(-60, 0);
     pros::delay(1300);
-    set_matchloader(false);
+    set_matchloader(false);;
     match_load_reset(100, 0, 1);
     chassis.arcade(50, 0);
     pros::delay(300);
@@ -195,7 +517,7 @@ inline void elims_right9() {
     pros::delay(300);
     chassis.turnToHeading(90, 300, {.minSpeed = 60});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-60, 0);
     pros::delay(300);
     /*
@@ -235,7 +557,7 @@ inline void elims_left9() {
     pros::delay(500);
     set_matchloader(true);
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.moveToPose(12.3, -38, -160, 400, {.minSpeed = 20});
     chassis.turnToHeading(-20, -150, {.minSpeed = 30});
     chassis.moveToPose(10, -43, 180, 1000, {.lead = 0.4, .maxSpeed = 60, .minSpeed = 30});
@@ -260,7 +582,7 @@ inline void elims_left9() {
     pros::delay(400);
     chassis.arcade(-60, 0);
     pros::delay(1300);
-    set_matchloader(false);
+    set_matchloader(false);;
     match_load_reset(100, 0, 4);
     chassis.arcade(50, 0);
     pros::delay(300);
@@ -288,7 +610,7 @@ inline void elims_left9() {
     pros::delay(300);
     chassis.turnToHeading(90, 300, {.minSpeed = 60});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-60, 0);
     pros::delay(800);
     /*
@@ -361,7 +683,7 @@ inline void LEFT张教练7() {
     pros::delay(300);
     chassis.turnToHeading(90, 300, {.minSpeed = 60});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-60, 0);
     pros::delay(1100);
     chassis.setPose(0, 0, 0);
@@ -426,7 +748,7 @@ inline void RIGHT张教练7() {
     pros::delay(300);
     chassis.turnToHeading(90, 300, {.minSpeed = 60});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-60, 0);
     pros::delay(1100);
     chassis.setPose(0, 0, 0);
@@ -461,7 +783,7 @@ inline void NewQualLeft() {
     pros::delay(500);
     set_matchloader(true);
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.moveToPose(16, -38, -160, 400, {.minSpeed = 20});
     chassis.turnToHeading(20, 150, {.minSpeed = 30});
     chassis.moveToPose(13.8, -44, 180, 1000, {.lead = 0.4, .maxSpeed = 60, .minSpeed = 30});
@@ -506,7 +828,7 @@ inline void NewQualLeft() {
 
     chassis.moveToPoint(52, -47, 700, {.forwards = false, .maxSpeed = 70});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     pros::delay(200);
     chassis.turnToPoint(9, -11, 400, {.forwards = false});
     chassis.waitUntilDone();
@@ -526,7 +848,7 @@ inline void NewQualLeft() {
     pros::delay(200);
     chassis.arcade(0, 0);
     pros::delay(300);
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(70, 0);
     pros::delay(200);
     chassis.moveToPose(30, -36, 135, 800, {.forwards = true, .lead = 0.05, .maxSpeed = 100, .minSpeed = 70});
@@ -552,7 +874,7 @@ inline void NewQualRight() {
     pros::delay(500);
     set_matchloader(true);
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.moveToPose(15, 38, -20, 400, {.minSpeed = 20});
     chassis.turnToHeading(-20, 50, {.minSpeed = 30});
     chassis.moveToPose(12, 44, 0, 1000, {.lead = 0.4, .maxSpeed = 70, .minSpeed = 30});
@@ -600,7 +922,7 @@ inline void NewQualRight() {
     pros::delay(80);
     chassis.moveToPoint(52, 47, 700, {.forwards = false, .maxSpeed = 70});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     pros::delay(200);
     chassis.turnToPoint(11.5, 9, 600);
     chassis.waitUntilDone();
@@ -619,7 +941,7 @@ inline void NewQualRight() {
     pros::delay(200);
     chassis.arcade(0, 0);
     pros::delay(550);
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-70, 0);
     pros::delay(200);
     chassis.arcade(0, 0);
@@ -645,7 +967,7 @@ inline void OLDqualleft() {
     pros::delay(500);
     set_matchloader(true);
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.moveToPose(14.5, -38, -160, 400, {.minSpeed = 20});
     chassis.turnToHeading(-10, -150, {.minSpeed = 30});
     chassis.moveToPose(13, -43, 180, 1000, {.lead = 0.4, .maxSpeed = 60, .minSpeed = 30});
@@ -666,7 +988,7 @@ inline void OLDqualleft() {
     pros::delay(400);
     chassis.arcade(35, 0);
     pros::delay(150);
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-5, 0);
     pros::delay(1200);
     // eject_mid_block();
@@ -700,7 +1022,7 @@ inline void OLDqualleft() {
     pros::delay(200);
     chassis.turnToHeading(90, 300, {.minSpeed = 60});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-60, 0);
     pros::delay(200);
     chassis.setPose(0, 0, 0);
@@ -728,7 +1050,7 @@ inline void OLDqualright() {
     pros::delay(500);
     set_matchloader(true);
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.moveToPose(14, 38, -20, 400, {.minSpeed = 20});
     chassis.turnToHeading(-10, 150, {.minSpeed = 30});
     chassis.moveToPose(10, 44, 0, 1000, {.lead = 0.4, .maxSpeed = 70, .minSpeed = 30});
@@ -740,7 +1062,7 @@ inline void OLDqualright() {
     chassis.turnToHeading(-20, 50, {.minSpeed = 80});
     chassis.moveToPoint(28, 34, 1000, {.forwards = false, .minSpeed = 15, .earlyExitRange = 5});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.turnToHeading(-135, 300);
     chassis.waitUntilDone();
     chassis.moveToPose(5, 12, -135, 700, {.forwards = true, .minSpeed = 50, .earlyExitRange = 5});
@@ -783,7 +1105,7 @@ inline void OLDqualright() {
     pros::delay(300);
     chassis.turnToHeading(90, 300, {.minSpeed = 60});
     chassis.waitUntilDone();
-    set_matchloader(false);
+    set_matchloader(false);;
     chassis.arcade(-60, 0);
     pros::delay(600);
     /*
