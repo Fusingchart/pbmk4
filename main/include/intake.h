@@ -73,7 +73,7 @@ void set_clamp(bool value);
 
 void hold_dist_and_reset(uint32_t sample_time, double heading_mod, int quadrant, int distance = 300, int tolerance = 1);
 
-void drive_until_distance(float heading_hold, int power, uint32_t ramp, int dist, int tolerance, bool greater, uint32_t timeout);
+void drive_until_distance(float heading_hold, const int power, const int dist, const int tolerance, float ramp_down, uint32_t timeout);
 
 // void score_7_mid();
 

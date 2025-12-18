@@ -261,65 +261,33 @@ void hold_dist_and_reset(uint32_t sample_time, double heading_mod, int quadrant,
     }
 }
 
-void drive_until_distance(float heading_hold, const int power, const uint32_t ramp, const int dist, const int tolerance,
-                          const bool greater, uint32_t timeout) {
+void drive_until_distance(float heading_hold, const int power, const int dist, const int tolerance, float ramp_down, uint32_t timeout) {
     printf("called\n");
     chassis.cancelAllMotions();
 
-    float heading = std::fmod(heading_hold + 360000, 360);
-    if (heading > 180 && heading <= 360) {
-        heading -= 360;
-        heading *= -1;
+    constexpr float MIN_OUT = 8;
+
+    const int32_t ramp_down_mm = ramp_down * 25.4;
+
+    const uint32_t end = pros::millis() + timeout;
+
+    while (pros::millis() <= end)
+    {
+        const int32_t measure = front_dist.get_distance();
+        const int32_t diff = measure - dist;
+        const float diff_in = diff / 25.4f;
+
+        float mult = std::abs(diff_in) > ramp_down ? 1 : std::abs(diff_in) / ramp_down;
+
+        float out = std::pow(std::abs(diff_in), 3);
+        if (out < MIN_OUT) out = MIN_OUT;
+
+        out *= lemlib::sgn(diff_in);
+        out *= mult;
+
+        chassis.arcade(out, 0);
     }
 
-    const uint32_t start_time = pros::millis();
-    const uint32_t ramp_up_time_end = start_time + ramp;
-    const int ramp_down_dist = 24 * 25.4;
-
-    while (true) {
-        float mult = static_cast<float>(pros::millis() - start_time) / static_cast<float>(ramp);
-
-        if (pros::millis() > ramp_up_time_end) {
-            mult = 1;
-        }
-
-        const float dist_diff = std::abs(front_dist.get_distance() - dist);
-        if (dist_diff < ramp_down_dist) {
-            mult = dist_diff / static_cast<float>(ramp_down_dist);
-        }
-
-        constexpr int minout = 12;
-        float drive = power * mult;
-        if (front_dist.get_distance() - dist < 0) drive *= -1;
-        if (std::abs(drive) < minout) {
-            drive = lemlib::sgn(drive) * minout;
-        }
-
-        float cheading = std::fmod(chassis.getPose().theta + 360000, 360);
-        bool mod = false;
-        if (cheading > 180 && cheading <= 360) {
-            cheading -= 360;
-            cheading *= -1;
-            mod = true;
-        }
-
-        float theta_diff = cheading - heading;
-        // highligher may make std::max(6.0f, std::abs(theta_diff)) as incorrect for some type error, but it doesn't build otherise.
-        chassis.arcade(drive, (mod ? 1 : -1) * lemlib::sgn(theta_diff) * std::max(6.0f, std::abs(theta_diff)));
-
-        printf("%f\n", power * mult);
-
-        pros::delay(10);
-        // (greater ? front_dist2_sensor.get_distance() > dist : front_dist2_sensor.get_distance() < dist) || dist_diff < static_cast<float>(tolerance) ||
-        if (std::abs(dist_diff) < tolerance || pros::millis() > timeout + start_time) {
-            chassis.cancelAllMotions();
-            chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
-            chassis.arcade(0, 0);
-            pros::delay(200);;
-            chassis.setBrakeMode(MOTOR_BRAKE_COAST);
-            break;
-        }
-    }
 }
 
 void score_7_mid() {
