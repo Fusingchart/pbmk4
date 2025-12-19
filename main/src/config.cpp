@@ -36,7 +36,7 @@ pros::Distance left_dist(LEFT_DIST_PORT);
 pros::Distance right_dist(RIGHT_DIST_PORT);
 
 Point front_dist_offset(-5, 6.5);
-Point left_dist_offset(-5, -0.25);
+Point left_dist_offset(-5.67, -0.25);
 Point right_dist_offset(6.5, 4);
 
 // drivetrain settings

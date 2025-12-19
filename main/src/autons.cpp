@@ -8,76 +8,87 @@
 
 constexpr float WALL_COORD = 71;
 
-constexpr float MATCHLOAD_ENTER_SPEED = 80;
+constexpr float MATCHLOAD_ENTER_SPEED_MAX = 70;
+constexpr float MATCHLOAD_ENTER_SPEED_MIN = 15;
 constexpr uint32_t MATCHLOAD_DURATION = 2000;
 
-constexpr float LONG_GOAL_ENTER_SPEED = 60;
-constexpr uint32_t LONG_GOAL_DURATION = 2000;
+constexpr float LONG_GOAL_ENTER_SPEED_MIN = 110;
+constexpr float LONG_GOAL_ENTER_SPEED_MAX = 80;
+constexpr uint32_t LONG_GOAL_DURATION = 1000;
 
 constexpr float LONG_GOAL_CROSS_MIN_SPEED = 80;
 constexpr int LONG_GOAL_DIST_ALIGN = 435;
 
-constexpr uint32_t WALL_FLUSH_TIME = 400;
+constexpr uint32_t WALL_FLUSH_TIME = 600;
 constexpr float WALL_FLUSH_Y = 61.8;
+constexpr float WALL_FLUSH_SPEED = 60;
 
 void long_goals(const bool first)
 {
 
 #define pn (first?1:-1)
 #define aj(a, b) (first?a:b)
+    intake_set_state(INTAKE);
+
     // move to matchloader 1
-    chassis.moveToPose(pn* -47.5 +aj(0, 0), pn* 47 +aj(0, 0), -90, 2000, {}, false);
-    match_load_reset(100, 0, aj(2,4));
+    chassis.moveToPoint(pn* -47.5 +aj(0, 0), pn* 46 +aj(0, 0), 1000, {}, false);
     set_matchloader(true);
+    chassis.turnToHeading(aj(-90, 90), 600, {}, false);
+    match_load_reset(100, 0, aj(2,4));
     // enter matchloader 1
-    chassis.moveToPoint(pn* -61, pn* 47, 800, {.minSpeed = MATCHLOAD_ENTER_SPEED}, false);
+    chassis.moveToPoint(pn* -61, pn* 46, 300, {.maxSpeed = MATCHLOAD_ENTER_SPEED_MAX, }, false);
     // finish matchloading
+    chassis.arcade(MATCHLOAD_ENTER_SPEED_MIN, 0);
     pros::delay(MATCHLOAD_DURATION);
 
     // cross to other side
+    chassis.moveToPoint(chassis.getPose().x + aj(5, -5), chassis.getPose().y, 600, {.forwards = false}, false);
+    chassis.turnToHeading(aj(-135, 45), 600, {}, false);
     chassis.moveToPoint(pn* -23, pn* 60, 1000, {.forwards = false, .minSpeed = LONG_GOAL_CROSS_MIN_SPEED, .earlyExitRange = 4}, false);
-    chassis.moveToPoint(pn* 30, pn* 61, 1500, {.forwards = false}, false);
     set_matchloader(false);
+    chassis.moveToPoint(pn* 40, pn* 61, 1500, {.forwards = false}, false);
     // flush with wall
-    chassis.turnToHeading(aj(0, 180), 600);
-    chassis.arcade(90, 0);
-    pros::delay(WALL_FLUSH_TIME);
+    chassis.turnToHeading(aj(0, 180), 800, {}, false);
     const float side_distance = static_cast<float>(find_dist(right_dist, right_dist_offset, 0, Dir::Right, 100));
-    chassis.setPose(pn* (WALL_COORD - side_distance), pn* WALL_FLUSH_Y, aj(0, 180));
+    chassis.setPose(pn* (WALL_COORD - side_distance), chassis.getPose().y, chassis.getPose().theta);
 
     // move to long goal
-    chassis.moveToPoint(chassis.getPose().x, pn* 47, 800, {.forwards = false}, false);
+    drive_until_distance(0, 119, 450, 1, 0, 850);
     chassis.turnToHeading(aj(90, -90), 600, {}, false);
-    chassis.moveToPoint(pn* 0, pn* 47, 300, {.forwards = false, .minSpeed = LONG_GOAL_ENTER_SPEED}, false);
+    chassis.moveToPoint(pn* 0, pn* 47, 700, {.forwards = false, .maxSpeed = LONG_GOAL_ENTER_SPEED_MAX, }, false);
     // scoring
     intake_set_state(SCORE_HIGH);
-    chassis.arcade(-LONG_GOAL_ENTER_SPEED, 0);
+    chassis.arcade(-LONG_GOAL_ENTER_SPEED_MIN, 0);
     pros::delay(LONG_GOAL_DURATION);
 
     // reset pose at long goal
-    chassis.setPose(pn* 30, pn* 47, aj(90, -90));
+    match_load_reset(MATCHLOAD_DURATION, 0, aj(1, 3));
 
     // enter matchloader 2
     intake_set_state(INTAKE);
     set_matchloader(true);
-    chassis.moveToPoint(pn* 61, pn* 47, 800, {.minSpeed = MATCHLOAD_ENTER_SPEED}, false);
-    chassis.arcade(-MATCHLOAD_ENTER_SPEED, 0);
+    chassis.moveToPoint(pn* 61, pn* 46, 700, {.maxSpeed = MATCHLOAD_ENTER_SPEED_MAX,}, false);
+    chassis.arcade(MATCHLOAD_ENTER_SPEED_MIN, 0);
     // finish matchloading while running reset
+
     match_load_reset(MATCHLOAD_DURATION, 0, aj(1, 3));
 
     // move to long goal
-    chassis.moveToPoint(pn* 0, pn* 47, 1500, {.forwards = false, .minSpeed = LONG_GOAL_ENTER_SPEED}, true);
+    chassis.moveToPoint(pn* 0, pn* 47, 1500, {.forwards = false, .maxSpeed = LONG_GOAL_ENTER_SPEED_MAX,}, true);
     pros::delay(700);
     // scoring
     intake_set_state(SCORE_HIGH);
-    chassis.arcade(-LONG_GOAL_ENTER_SPEED, 0);
+    chassis.arcade(-LONG_GOAL_ENTER_SPEED_MIN, 0);
     pros::delay(LONG_GOAL_DURATION);
 
     // reset pose at long goal
-    chassis.setPose(pn* 30, pn* 47, aj(90, -90));
+    match_load_reset(MATCHLOAD_DURATION, 0, aj(1, 3));
+
+    set_matchloader(false);
 }
 
-void skills() {
+void skills()
+{
     // for coordinates and heading, they are in the format of `[target] +[adjustment] +[tuning]`
     // target is the point of interest, adjustment is the number added during routing, and tuning is to adjust when tuning.
 
@@ -113,6 +124,7 @@ void skills() {
     // position to park zone
     intake_set_state(IDLE);
     chassis.moveToPose(63.5, 24, 170, 1500, {.horizontalDrift = 8, .minSpeed = 60, .earlyExitRange = 2}, false);
+    chassis.turnToHeading(170, 300, {}, false);
     chassis.arcade(60, 0);
     pros::delay(1000);
 
@@ -120,10 +132,15 @@ void skills() {
     intake_set_state(INTAKE);
     // sharp to initially enter
     chassis.arcade(90, 0);
-    pros::delay(300);
+    pros::delay(350);
     // slow cross
-    chassis.arcade(60, 0);
-    pros::delay(1000);
+    chassis.arcade(70, 0);
+    constexpr uint32_t cross_time = 3100;
+    constexpr uint32_t drop_time = 900;
+    pros::delay(drop_time);
+    set_matchloader(true);
+    pros::delay(cross_time - drop_time);
+
     // correct heading
     chassis.turnToHeading(180, 600, {}, false);
     // back up
@@ -134,6 +151,8 @@ void skills() {
     // reset pose
     const float side_distance = find_dist(left_dist, left_dist_offset, M_PI, Dir::Left, 100);
     chassis.setPose(WALL_COORD - side_distance, -17.5, chassis.getPose().theta);
+
+    set_matchloader(false);
 
     // collect one from four stack
     chassis.turnToPoint(25.25, -22, 800, {}, false);
@@ -146,7 +165,8 @@ void skills() {
     pros::delay(600);
 
     // score
-    score_7_mid();
+    intake_set_state(SCORE_MID);
+    pros::delay(3500);
 
     // 4. long goal 2
 

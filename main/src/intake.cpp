@@ -265,7 +265,8 @@ void drive_until_distance(float heading_hold, const int power, const int dist, c
     printf("called\n");
     chassis.cancelAllMotions();
 
-    constexpr float MIN_OUT = 8;
+    constexpr float MIN_OUT = 20;
+    constexpr float MAX_OUT = 110;
 
     const int32_t ramp_down_mm = ramp_down * 25.4;
 
@@ -277,10 +278,11 @@ void drive_until_distance(float heading_hold, const int power, const int dist, c
         const int32_t diff = measure - dist;
         const float diff_in = diff / 25.4f;
 
-        float mult = std::abs(diff_in) > ramp_down ? 1 : std::abs(diff_in) / ramp_down;
+        float mult = std::min((std::abs(diff_in) > ramp_down ? 1 : std::abs(diff_in) / ramp_down) + 0.25f, 1.0f);
 
-        float out = std::pow(std::abs(diff_in), 3);
+        float out = std::pow(std::abs(diff_in), 1.8);
         if (out < MIN_OUT) out = MIN_OUT;
+        if (out > MAX_OUT) out = MAX_OUT;
 
         out *= lemlib::sgn(diff_in);
         out *= mult;
